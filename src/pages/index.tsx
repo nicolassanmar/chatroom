@@ -15,24 +15,7 @@ const Home: NextPage = () => {
             className="m-auto flex h-[80vh] flex-1 flex-col overflow-y-auto "
           >
             <MessageBox text="Hello" isOwn={true} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox text="Hello" isOwn={false} />
+
             <MessageBox text="Hello" isOwn={false} />
             <MessageBox
               text="Lorem ipsum dolor sit amet, consectetur adipis elit. Quisquam, quod. Lorem ipsum dolor sit amet, consectetur adip "

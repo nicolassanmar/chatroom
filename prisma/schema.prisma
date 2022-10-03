@@ -6,10 +6,18 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "mongodb"
     url      = env("DATABASE_URL")
 }
 
 model Example {
-    id String @id @default(cuid())
+    id String @id @map("_id")
+}
+
+model Message {
+    id        String   @id @default(uuid()) @map("_id")
+    text      String
+    // To return Date intact through the API we need to add data transformers
+    // https://trpc.io/docs/data-transformers
+    createdAt DateTime @unique @default(now())
 }

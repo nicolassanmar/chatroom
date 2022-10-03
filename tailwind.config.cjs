@@ -5,4 +5,12 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  safelist: [
+    "justify-start",
+    "justify-end",
+    "bg-blue-400",
+    "bg-blue-white",
+    "text-white",
+    "text-gray-700",
+  ],
 };

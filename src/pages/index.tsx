@@ -9,24 +9,22 @@ const Home: NextPage = () => {
   const [ownMessages, setOwnMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
 
-  const {
-    data,
-    isLoading: isDataLoading,
-    refetch,
-  } = trpc.useQuery(["msg.list"]);
+  const utils = trpc.useContext();
+  const { data, isLoading: isDataLoading } = trpc.useQuery(["msg.list"]);
   const addMessageMutation = trpc.useMutation(["msg.add"], {
     onSuccess: (addedMessage) => {
       setOwnMessages([...ownMessages, addedMessage.id]);
-      refetch();
+      utils.invalidateQueries(["msg.list"]);
     },
   });
+
   const isLoading = isDataLoading || addMessageMutation.isLoading;
 
   return (
     <>
       <div className="flex h-screen w-screen flex-col items-center justify-center bg-gradient-to-tr ">
         <button
-          onClick={() => refetch()}
+          onClick={() => utils.invalidateQueries(["msg.list"])}
           aria-label="Reload messages"
           className="p-2"
         >

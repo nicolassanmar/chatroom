@@ -1,4 +1,4 @@
-import { timestampDisplay } from "../shared/";
+import { timestampDisplay } from "../../utils/timestampDisplay";
 
 export const MessageBox: React.FC<{
   text: string;

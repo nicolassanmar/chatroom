@@ -1,1 +1,0 @@
-export { timestampDisplay } from "./timestampDisplay";

@@ -1,7 +1,5 @@
-import { createRouter } from "./context";
-import { randomUUID } from "crypto";
-
 import { z } from "zod";
+import { createRouter } from "./context";
 
 export const messageRouter = createRouter()
   .mutation("add", {
@@ -9,10 +7,10 @@ export const messageRouter = createRouter()
       text: z.string().min(1).max(4096),
     }),
     async resolve({ input, ctx }) {
-      console.log("msg.add called " + input);
+      console.log("msg.add called ");
+      console.log(input);
       return await ctx.prisma.message.create({
         data: {
-          id: randomUUID(),
           text: input.text,
         },
       });

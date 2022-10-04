@@ -1,30 +1,61 @@
 import type { NextPage } from "next";
-import Head from "next/head";
+import { useState } from "react";
+
 import { trpc } from "../utils/trpc";
+import { FiRotateCw } from "react-icons/fi";
+import { AiOutlineSend } from "react-icons/ai";
 
 const Home: NextPage = () => {
-  const { data, isLoading } = trpc.useQuery(["msg.list"]);
-  // const addMessageMutation = trpc.useMutation(["msg.add"]);
-  // addMessageMutation.mutate({ text: "Hello" });
+  const [ownMessages, setOwnMessages] = useState<string[]>([]);
+  const [message, setMessage] = useState<string>("");
+
+  const { data, isLoading, refetch } = trpc.useQuery(["msg.list"]);
+  const addMessageMutation = trpc.useMutation(["msg.add"], {
+    onSuccess: (addedMessage) => {
+      setOwnMessages([...ownMessages, addedMessage.id]);
+      refetch();
+    },
+  });
+
   return (
     <>
       <div className="flex h-screen w-screen flex-col items-center justify-center bg-gradient-to-tr ">
-        {/* <button >Reload</button> */}
-        <div className="max-h-screen max-w-2xl rounded border border-gray-300 bg-gray-50">
+        <button
+          onClick={() => refetch()}
+          aria-label="Reload messages"
+          className="p-2"
+        >
+          <FiRotateCw />
+        </button>
+        <div className="max-h-screen w-full max-w-2xl rounded border border-gray-300 bg-gray-50 sm:w-2/3">
           <div
             id="messageContainer"
-            className="m-auto flex h-[80vh] flex-1 flex-col overflow-y-auto "
+            className="m-auto flex h-[80vh] flex-1 flex-col overflow-y-auto landscape:md:h-[60vh] "
           >
-            <MessageBox text="Hello" isOwn={true} />
             {isLoading ? (
               <div>Loading...</div>
             ) : (
               data?.map((msg) => (
-                <MessageBox key={msg.id} text={msg.text} isOwn={false} />
+                <MessageBox
+                  key={msg.id}
+                  text={msg.text}
+                  isOwn={ownMessages.includes(msg.id)}
+                />
               ))
             )}
           </div>
-          <MessageBar />
+          <MessageBar
+            value={message}
+            onChange={(event) => {
+              setMessage(event.target.value);
+            }}
+            onSend={() => {
+              if (message) {
+                addMessageMutation.mutate({ text: message });
+                setMessage("");
+              }
+            }}
+          />
         </div>
       </div>
     </>
@@ -54,24 +85,29 @@ const MessageBox: React.FC<{
   );
 };
 
-const MessageBar: React.FC = (props) => {
+const MessageBar: React.FC<{
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSend: () => void;
+}> = (props) => {
   return (
     <>
       <div className="flex w-full items-center justify-between border-t border-gray-300 p-3">
         <input
+          value={props.value}
+          onChange={props.onChange}
           type="text"
           aria-label="Message Input"
           placeholder="Enter Message ..."
           className="mx-3 block w-full rounded-full bg-gray-100 py-2 pl-4 text-gray-700 outline-none"
           name="message"
         />
-        <button type="submit" aria-label="Submit Message">
-          <svg
-            className="h-5 w-5 origin-center rotate-90 transform text-gray-500"
-            fill="currentColor"
-          >
-            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-          </svg>
+        <button
+          type="submit"
+          aria-label="Submit Message"
+          onClick={() => props.onSend()}
+        >
+          <AiOutlineSend className="text-2xl text-gray-700" />
         </button>
       </div>
     </>

@@ -3,8 +3,9 @@ import Head from "next/head";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-
+  const { data, isLoading } = trpc.useQuery(["msg.list"]);
+  // const addMessageMutation = trpc.useMutation(["msg.add"]);
+  // addMessageMutation.mutate({ text: "Hello" });
   return (
     <>
       <div className="flex h-screen w-screen flex-col items-center justify-center bg-gradient-to-tr ">
@@ -15,16 +16,13 @@ const Home: NextPage = () => {
             className="m-auto flex h-[80vh] flex-1 flex-col overflow-y-auto "
           >
             <MessageBox text="Hello" isOwn={true} />
-
-            <MessageBox text="Hello" isOwn={false} />
-            <MessageBox
-              text="Lorem ipsum dolor sit amet, consectetur adipis elit. Quisquam, quod. Lorem ipsum dolor sit amet, consectetur adip "
-              isOwn={true}
-            />
-            <MessageBox
-              text="Lorem ipsum dolor sit amet, consectetur adipis"
-              isOwn={false}
-            />
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              data?.map((msg) => (
+                <MessageBox key={msg.id} text={msg.text} isOwn={false} />
+              ))
+            )}
           </div>
           <MessageBar />
         </div>

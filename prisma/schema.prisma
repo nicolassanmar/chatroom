@@ -9,7 +9,6 @@ datasource db {
 
 model Message {
     id        String   @id @default(uuid()) @map("_id")
-    userId    String
     text      String
-    createdAt DateTime @unique @default(now())
+    createdAt DateTime @default(now())
 }

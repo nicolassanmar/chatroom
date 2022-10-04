@@ -22,7 +22,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="flex h-screen w-screen flex-col items-center justify-center bg-gradient-to-tr ">
+      <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-tr md:h-screen ">
         <button
           onClick={() => utils.invalidateQueries(["msg.list"])}
           aria-label="Reload messages"
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         >
           <FiRotateCw />
         </button>
-        <div className="max-h-screen w-full max-w-2xl rounded border border-gray-300 bg-gray-50 sm:w-2/3">
+        <div className="max-h-full w-full max-w-2xl rounded border border-gray-300 bg-gray-50 sm:w-2/3">
           <div
             id="messageContainer"
             // column-reverse is used to make the scrollbar begin at the bottom

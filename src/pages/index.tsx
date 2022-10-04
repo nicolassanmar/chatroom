@@ -9,13 +9,18 @@ const Home: NextPage = () => {
   const [ownMessages, setOwnMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
 
-  const { data, isLoading, refetch } = trpc.useQuery(["msg.list"]);
+  const {
+    data,
+    isLoading: isDataLoading,
+    refetch,
+  } = trpc.useQuery(["msg.list"]);
   const addMessageMutation = trpc.useMutation(["msg.add"], {
     onSuccess: (addedMessage) => {
       setOwnMessages([...ownMessages, addedMessage.id]);
       refetch();
     },
   });
+  const isLoading = isDataLoading || addMessageMutation.isLoading;
 
   return (
     <>
@@ -92,7 +97,13 @@ const MessageBar: React.FC<{
 }> = (props) => {
   return (
     <>
-      <div className="flex w-full items-center justify-between border-t border-gray-300 p-3">
+      <form
+        className="flex w-full items-center justify-between border-t border-gray-300 p-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.onSend();
+        }}
+      >
         <input
           value={props.value}
           onChange={props.onChange}
@@ -102,14 +113,10 @@ const MessageBar: React.FC<{
           className="mx-3 block w-full rounded-full bg-gray-100 py-2 pl-4 text-gray-700 outline-none"
           name="message"
         />
-        <button
-          type="submit"
-          aria-label="Submit Message"
-          onClick={() => props.onSend()}
-        >
+        <button type="button" aria-label="Submit Message">
           <AiOutlineSend className="text-2xl text-gray-700" />
         </button>
-      </div>
+      </form>
     </>
   );
 };

@@ -159,7 +159,12 @@ const MessageBar: React.FC<{
           className="mx-3 block w-full rounded-full bg-gray-100 py-2 pl-4 text-gray-700 outline-none"
           name="message"
         />
-        <button type="button" aria-label="Submit Message">
+        <button
+          className=" disabled:opacity-20"
+          type="submit"
+          aria-label="Submit Message"
+          disabled={props.value === ""}
+        >
           <AiOutlineSend className="text-2xl text-gray-700" />
         </button>
       </form>

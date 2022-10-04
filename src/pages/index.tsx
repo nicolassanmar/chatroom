@@ -33,20 +33,23 @@ const Home: NextPage = () => {
         <div className="max-h-screen w-full max-w-2xl rounded border border-gray-300 bg-gray-50 sm:w-2/3">
           <div
             id="messageContainer"
-            className="m-auto flex h-[80vh] flex-1 flex-col overflow-y-auto landscape:md:h-[60vh] "
+            // column-reverse is used to make the scrollbar begin at the bottom
+            className="m-auto flex h-[80vh] flex-1  flex-col-reverse overflow-y-auto landscape:md:h-[60vh]"
           >
-            {isLoading ? (
-              <div>Loading...</div>
-            ) : (
-              data?.map((msg) => (
-                <MessageBox
-                  key={msg.id}
-                  text={msg.text}
-                  createdAt={msg.createdAt}
-                  isOwn={ownMessages.includes(msg.id)}
-                />
-              ))
-            )}
+            <div>
+              {isLoading ? (
+                <div>Loading...</div>
+              ) : (
+                data?.map((msg) => (
+                  <MessageBox
+                    key={msg.id}
+                    text={msg.text}
+                    createdAt={msg.createdAt}
+                    isOwn={ownMessages.includes(msg.id)}
+                  />
+                ))
+              )}
+            </div>
           </div>
           <MessageBar
             value={message}

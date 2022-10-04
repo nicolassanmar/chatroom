@@ -12,6 +12,7 @@ export const messageRouter = createRouter()
       return await ctx.prisma.message.create({
         data: {
           text: input.text,
+          createdAt: new Date(),
         },
       });
     },

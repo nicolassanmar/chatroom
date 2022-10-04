@@ -44,6 +44,7 @@ const Home: NextPage = () => {
                 <MessageBox
                   key={msg.id}
                   text={msg.text}
+                  createdAt={msg.createdAt}
                   isOwn={ownMessages.includes(msg.id)}
                 />
               ))
@@ -71,23 +72,68 @@ export default Home;
 
 const MessageBox: React.FC<{
   text: string;
+  createdAt: Date;
   isOwn: boolean;
 }> = (props) => {
   return (
     <div className={`flex justify-${props.isOwn ? "start" : "end"}`}>
-      <div
-        className={`m-2 
-      w-fit max-w-xl 
-      rounded  px-4 py-2 shadow-md
-      bg-${props.isOwn ? "blue-400" : "white"}
-      text-${props.isOwn ? "white" : "gray-700"}
-      `}
-        aria-label="message"
-      >
-        {props.text}
+      <div className={`flex flex-col items-${props.isOwn ? "start" : "end"}`}>
+        <div
+          className={`m-2 
+        w-fit max-w-xl 
+        rounded px-4  py-2 shadow-md
+        bg-${props.isOwn ? "blue-400" : "white"}
+        text-${props.isOwn ? "white" : "gray-700"}
+        `}
+          aria-label="message"
+        >
+          {props.text}
+        </div>
+        <p className="px-4 text-sm text-gray-400">
+          {timestampDisplay(props.createdAt)}
+        </p>
       </div>
     </div>
   );
+};
+
+const timestampDisplay = (dateTime: Date): string => {
+  const formatter = new Intl.RelativeTimeFormat("en", {});
+  const now = new Date();
+  const diff = now.getTime() - dateTime.getTime();
+
+  const SECOND = 1000;
+  const MINUTE = 60 * SECOND;
+  const HOUR = 60 * MINUTE;
+
+  const intervals: {
+    greaterThan: number;
+    divisor: number;
+    unit: Intl.RelativeTimeFormatUnit;
+  }[] = [
+    { greaterThan: HOUR, divisor: HOUR, unit: "hour" },
+    { greaterThan: MINUTE, divisor: MINUTE, unit: "minute" },
+    { greaterThan: 30 * SECOND, divisor: SECOND, unit: "seconds" },
+  ];
+
+  if (diff <= 24 * HOUR) {
+    for (const interval of intervals) {
+      if (diff >= interval.greaterThan) {
+        const x = Math.round(Math.abs(diff) / interval.divisor);
+        return formatter.format(-x, interval.unit);
+      }
+    }
+  }
+
+  // More than a day ago
+  return dateTime.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    weekday: "short",
+    hour: "numeric",
+    hourCycle: "h12",
+    minute: "numeric",
+  });
 };
 
 const MessageBar: React.FC<{

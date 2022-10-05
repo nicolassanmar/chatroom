@@ -22,6 +22,7 @@ export const MessageBar: React.FC<{
           placeholder="Enter Message ..."
           className="mx-3 block w-full rounded-full bg-gray-100 py-2 pl-4 text-gray-700 outline-none"
           name="message"
+          autoComplete="off"
         />
         <button
           className=" disabled:opacity-20"
